@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MobMatch Ride</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      background: #00ff88;
+      font-weight: bold;
+    }
+
+    .card {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🚗 MobMatch Ride</h1>
+
+<div class="card">
+  <input id="pickup" placeholder="Pickup location">
+  <input id="destination" placeholder="Destination">
+
+  <button onclick="requestRide()">Request Ride</button>
+
+  <p id="status"></p>
+</div>
+
+<script>
+function requestRide() {
+  const pickup = document.getElementById("pickup").value;
+  const destination = document.getElementById("destination").value;
+
+  if (!pickup || !destination) {
+    alert("Enter both locations");
+    return;
+  }
+
+  document.getElementById("status").innerText =
+    "🔍 Searching for driver...";
+
+  setTimeout(() => {
+    document.getElementById("status").innerText =
+      "🚕 Driver found! Arriving in 5 minutes.";
+  }, 2000);
+}
+</script>
+
+</body>
+</html>
