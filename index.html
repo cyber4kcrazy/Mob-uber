@@ -80,6 +80,44 @@ function requestRide() {
 
   setTimeout(() => {
     document.getElementById("status").innerText =
+      "🚕 Driver assigned! Moving toward you...";
+
+    if (!marker) return;
+
+    let userPos = marker.getLatLng();
+
+    // Fake driver starting point
+    let driver = L.marker([
+      userPos.lat + 0.01,
+      userPos.lng + 0.01
+    ]).addTo(map).bindPopup("Driver");
+
+    let steps = 20;
+    let i = 0;
+
+    let interval = setInterval(() => {
+      if (i >= steps) {
+        clearInterval(interval);
+        document.getElementById("status").innerText =
+          "✅ Driver has arrived!";
+        return;
+      }
+
+      let lat = driver.getLatLng().lat + (userPos.lat - driver.getLatLng().lat) / 5;
+      let lng = driver.getLatLng().lng + (userPos.lng - driver.getLatLng().lng) / 5;
+
+      driver.setLatLng([lat, lng]);
+
+      i++;
+    }, 500);
+
+  }, 2000);
+}
+  document.getElementById("status").innerText =
+    "🔍 Finding nearby driver...";
+
+  setTimeout(() => {
+    document.getElementById("status").innerText =
       "🚕 Driver assigned! 3 mins away.";
   }, 2000);
 }
