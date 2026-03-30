@@ -2,19 +2,29 @@
 <html>
 <head>
   <title>MobMatch Ride</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
   <style>
     body {
+      margin: 0;
       font-family: Arial;
       background: #111;
       color: white;
-      text-align: center;
-      padding: 20px;
+    }
+
+    #map {
+      height: 60vh;
+    }
+
+    .panel {
+      padding: 15px;
     }
 
     input, button {
       padding: 10px;
-      margin: 10px;
-      width: 80%;
+      margin: 8px 0;
+      width: 100%;
       border-radius: 8px;
       border: none;
     }
@@ -23,20 +33,16 @@
       background: #00ff88;
       font-weight: bold;
     }
-
-    .card {
-      background: #222;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
   </style>
 </head>
+
 <body>
 
-<h1>🚗 MobMatch Ride</h1>
+<h2 style="text-align:center;">🚗 MobMatch Ride</h2>
 
-<div class="card">
+<div id="map"></div>
+
+<div class="panel">
   <input id="pickup" placeholder="Pickup location">
   <input id="destination" placeholder="Destination">
 
@@ -45,22 +51,36 @@
   <p id="status"></p>
 </div>
 
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script>
+let map = L.map('map').setView([6.5244, 3.3792], 13); // Lagos default
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+}).addTo(map);
+
+let marker;
+
+// Get user location
+navigator.geolocation.getCurrentPosition((pos) => {
+  const lat = pos.coords.latitude;
+  const lng = pos.coords.longitude;
+
+  map.setView([lat, lng], 15);
+
+  marker = L.marker([lat, lng]).addTo(map)
+    .bindPopup("You are here")
+    .openPopup();
+});
+
 function requestRide() {
-  const pickup = document.getElementById("pickup").value;
-  const destination = document.getElementById("destination").value;
-
-  if (!pickup || !destination) {
-    alert("Enter both locations");
-    return;
-  }
-
   document.getElementById("status").innerText =
-    "🔍 Searching for driver...";
+    "🔍 Finding nearby driver...";
 
   setTimeout(() => {
     document.getElementById("status").innerText =
-      "🚕 Driver found! Arriving in 5 minutes.";
+      "🚕 Driver assigned! 3 mins away.";
   }, 2000);
 }
 </script>
